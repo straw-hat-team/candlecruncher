@@ -1,0 +1,17 @@
+version: "3"
+tasks:
+  default:
+    cmds:
+      - task --list-all
+
+  wasm:compile:
+    desc: "Compiles all the strategies into wasm files"
+    vars:
+      SCRIPTS:
+        sh: ls ./strategies
+    ignore_error: true
+    cmds:
+      - for:
+          var: SCRIPTS
+        cmd: |-
+          tinygo build -o tmp/{{.ITEM}}.wasm -target wasi -buildmode c-shared ./strategies/{{.ITEM}}
